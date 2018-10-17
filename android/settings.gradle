@@ -1,0 +1,3 @@
+rootProject.name = 'hoozin2'
+
+include ':app'
