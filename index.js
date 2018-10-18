@@ -1,7 +1,8 @@
-/** @format */
+import {Navigation} from 'react-native-navigation';
+import {registerScreens, layout} from './App/Containers/screens';
 
-import {AppRegistry} from 'react-native';
-import App from './App/Containers/App'
-import {name as appName} from './app.json';
+registerScreens();
 
-AppRegistry.registerComponent(appName, () => App);
+Navigation.events().registerAppLaunchedListener(() => {
+    Navigation.setRoot(layout);
+});
