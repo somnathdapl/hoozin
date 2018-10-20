@@ -1,17 +1,18 @@
 import React from 'react';
 import { Component } from 'react';
-import { View, TouchableOpacity, Text, TextInput, ImageBackground, Image } from 'react-native';
+import { View, TouchableOpacity, Text, TextInput, ImageBackground, Image, ActivityIndicator } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { connect } from 'react-redux';
 
 import { LoginThunk } from '../../Thunks/LoginThunk';
 import { LoginStyles } from './LoginStyle';
-import {Icons} from '../../Theme/Icons';
+import { Icons } from '../../Theme/Icons';
 
 interface Props {
   componentId: string,
   authenticate: Function,
-  user: Object
+  user: Object,
+  showSpinner: boolean
 }
 
 interface State {
@@ -71,7 +72,7 @@ class LoginScreen extends Component<Props, State> {
   }
 
   onGooglePressed() {
-
+    this.props.authenticate();
   }
 
   onForgotPassPressed() {
@@ -79,85 +80,91 @@ class LoginScreen extends Component<Props, State> {
   }
 
   onCreateAccountPressed() {
-    
+
   }
 
   render() {
     return (
-      <ImageBackground source={require('../../Assets/Images/login_background.png')} style={LoginStyles.container}>
-        { /*  logo part */}
-        <View style={LoginStyles.logo} >
-          <Text style={LoginStyles.logoText}>hoozin</Text>
-        </View>
-
-        { /* input part */}
-        <View style={LoginStyles.inputForm} >
-          <TextInput multiline={false}
-            style={
-              [LoginStyles.textInput, LoginStyles.line]
-            }
-            autoCapitalize='none'
-            autoCorrect={false}
-            textContentType='emailAddress'
-            onChangeText={(text: string) => this.updateStateWith(text, 'email')}
-            value={this.state.email}
-            placeholder='Email'
-            placeholderTextColor={'#707070'}
-            enablesReturnKeyAutomatically={true}
-            returnKeyType="next"
-            underlineColorAndroid='transparent'
-          />
-          <TextInput multiline={false}
-            style={[LoginStyles.textInput, LoginStyles.line]}
-            textContentType='password'
-            secureTextEntry={true}
-            onChangeText={(text: string) => this.updateStateWith(text, 'password')}
-            value={this.state.password}
-            placeholder='Password'
-            placeholderTextColor={'#707070'}
-            enablesReturnKeyAutomatically={true}
-            returnKeyType="done"
-            underlineColorAndroid='transparent'
-          />
-          <View style={[LoginStyles.rowItem, LoginStyles.separator]} >
-            <TouchableOpacity style={[LoginStyles.rowItem]} onPress={() => this.onEmailLoginPressed()} >
-              <Text style={LoginStyles.loginButton}>Login</Text>
-            </TouchableOpacity>
+      <React.Fragment>
+        <ImageBackground source={require('../../Assets/Images/login_background.png')} style={LoginStyles.container}>
+          { /*  logo part */}
+          <View style={LoginStyles.logo} >
+            <Text style={LoginStyles.logoText}>hoozin</Text>
           </View>
-          <View style={LoginStyles.rowItem} >
-            <Text style={LoginStyles.commonText}>or continue with</Text>
-          </View>
-          <View style={[LoginStyles.socialLogin, LoginStyles.rowItem]}>
-            <TouchableOpacity onPress={() => this.onFacebookPressed()}>
-              <Image source={Icons.fbLogin} />
-            </TouchableOpacity>
 
-            <TouchableOpacity style={LoginStyles.googleLogin}
-              onPress={() => this.onGooglePressed()}>
-              <Image source={Icons.gLogin} />
-            </TouchableOpacity>
-          </View>
-        </View>
+          { /* input part */}
+          <View style={LoginStyles.inputForm} >
+            <TextInput multiline={false}
+              style={
+                [LoginStyles.textInput, LoginStyles.line]
+              }
+              autoCapitalize='none'
+              autoCorrect={false}
+              textContentType='emailAddress'
+              onChangeText={(text: string) => this.updateStateWith(text, 'email')}
+              value={this.state.email}
+              placeholder='Email'
+              placeholderTextColor={'#707070'}
+              enablesReturnKeyAutomatically={true}
+              returnKeyType="next"
+              underlineColorAndroid='transparent'
+            />
+            <TextInput multiline={false}
+              style={[LoginStyles.textInput, LoginStyles.line]}
+              textContentType='password'
+              secureTextEntry={true}
+              onChangeText={(text: string) => this.updateStateWith(text, 'password')}
+              value={this.state.password}
+              placeholder='Password'
+              placeholderTextColor={'#707070'}
+              enablesReturnKeyAutomatically={true}
+              returnKeyType="done"
+              underlineColorAndroid='transparent'
+            />
+            <View style={[LoginStyles.rowItem, LoginStyles.separator]} >
+              <TouchableOpacity style={[LoginStyles.rowItem]} onPress={() => this.onEmailLoginPressed()} >
+                <Text style={LoginStyles.loginButton}>Login</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={LoginStyles.rowItem} >
+              <Text style={LoginStyles.commonText}>or continue with</Text>
+            </View>
+            <View style={[LoginStyles.socialLogin, LoginStyles.rowItem]}>
+              <TouchableOpacity onPress={() => this.onFacebookPressed()}>
+                <Image source={Icons.fbLogin} />
+              </TouchableOpacity>
 
-        { /* footer part */}
-        <View style={LoginStyles.footer} >
-          <TouchableOpacity style={LoginStyles.buttonContainer}
-            onPress={() => this.onForgotPassPressed()}>
-            <Text style={LoginStyles.button}>Forgot Password</Text>
-          </TouchableOpacity >
-          <TouchableOpacity style={LoginStyles.buttonContainer}
-            onPress={() => this.onCreateAccountPressed()}>
-            <Text style={LoginStyles.button}>Create Account</Text>
-          </TouchableOpacity >
-        </View>
-      </ImageBackground>
+              <TouchableOpacity style={LoginStyles.googleLogin}
+                onPress={() => this.onGooglePressed()}>
+                <Image source={Icons.gLogin} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          { /* footer part */}
+          <View style={LoginStyles.footer} >
+            <TouchableOpacity style={LoginStyles.buttonContainer}
+              onPress={() => this.onForgotPassPressed()}>
+              <Text style={LoginStyles.button}>Forgot Password</Text>
+            </TouchableOpacity >
+            <TouchableOpacity style={LoginStyles.buttonContainer}
+              onPress={() => this.onCreateAccountPressed()}>
+              <Text style={LoginStyles.button}>Create Account</Text>
+            </TouchableOpacity >
+          </View>
+        </ImageBackground>
+        {this.props.showSpinner ?
+          <ActivityIndicator /> : null
+        }
+      </React.Fragment>
     )
   }
 }
 
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
-    user: state.Auth.user
+    user: state.Auth.user,
+    showSpinner: state.Auth.shouldShowSpinner
   }
 };
 

@@ -15,6 +15,9 @@ target 'hoozin2' do
   pod 'Firebase/Database', '~> 5.9.0'
   pod 'Firebase/Storage', '~> 5.9.0'
 
+  # Required by Google sign-in SDK
+  pod 'GoogleSignIn'
+
   target 'hoozin2Tests' do
     inherit! :search_paths
     # Pods for testing

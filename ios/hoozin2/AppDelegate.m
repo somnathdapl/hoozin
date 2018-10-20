@@ -30,6 +30,9 @@
                                             moduleProvider:nil
                                              launchOptions:launchOptions];
   [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];
+  NSString *filePath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info" ofType:@"plist"];
+  NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:filePath];
+  [GIDSignIn sharedInstance].clientID = [plistDict objectForKey:@"CLIENT_ID"];
 #if RCT_DEV
   [bridge moduleForClass:[RCTDevLoadingView class]];
 #endif
@@ -59,6 +62,31 @@
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
   [[RNFirebaseMessaging instance] didRegisterUserNotificationSettings:notificationSettings];
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  // ADD THE FOLLOWING CODE
+  BOOL handled = [[GIDSignIn sharedInstance] handleURL:url
+                                     sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                            annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+  return handled;
+  // ADD THE ABOVE CODE
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+  // ADD THE FOLLOWING CODE
+  if ([[GIDSignIn sharedInstance] handleURL:url
+                          sourceApplication:sourceApplication
+                                 annotation:annotation]) {
+    return YES;
+  }
+  // ADD THE ABOVE CODE
+  return YES;
 }
 
 @end

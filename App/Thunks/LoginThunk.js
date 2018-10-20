@@ -1,7 +1,8 @@
 export const LoginThunk = () => {
     return (dispatch, getStore) => {
-        return dispatch({
-            type: 'LOGIN'
+        // First, dispatch action to respond to UI
+        dispatch({
+            type: 'LOGIN_INIT'
         });
     }
 }
