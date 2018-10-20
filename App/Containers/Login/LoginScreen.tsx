@@ -1,7 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
-import { View, TouchableOpacity, Text, TextInput, ImageBackground, Image, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, Text, TextInput, ImageBackground, Image } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+import { Spinner, Overlay } from '@shoutem/ui';
 import { connect } from 'react-redux';
 
 import { LoginThunk } from '../../Thunks/LoginThunk';
@@ -154,7 +155,9 @@ class LoginScreen extends Component<Props, State> {
           </View>
         </ImageBackground>
         {this.props.showSpinner ?
-          <ActivityIndicator /> : null
+          <Overlay styleName='fill-parent'>
+            <Spinner />
+          </Overlay>:null
         }
       </React.Fragment>
     )
@@ -164,7 +167,7 @@ class LoginScreen extends Component<Props, State> {
 const mapStateToProps = (state: any, ownProps: any) => {
   return {
     user: state.Auth.user,
-    showSpinner: state.Auth.shouldShowSpinner
+    showSpinner: state.Spinner.shouldShowSpinner
   }
 };
 

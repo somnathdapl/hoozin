@@ -3,7 +3,8 @@ import ConfigureStore from './CreateStore';
 
 /* ------------- Assemble The Reducers ------------- */
 const rootReducer = combineReducers({
-    Auth: require('./AuthRedux').reducer
+    Auth: require('./AuthRedux').reducer,
+    Spinner: require('./SpinnerRedux').reducer
 });
 
 export default () => {
