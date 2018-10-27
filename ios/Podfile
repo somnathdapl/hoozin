@@ -18,6 +18,8 @@ target 'hoozin2' do
   # Required by Google sign-in SDK
   pod 'GoogleSignIn'
 
+  pod 'RNGoogleSignin', :path => '../node_modules/react-native-google-signin'
+
   target 'hoozin2Tests' do
     inherit! :search_paths
     # Pods for testing
